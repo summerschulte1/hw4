@@ -29,4 +29,7 @@ struct Node {
  */
 bool equalPaths(Node * root);
 
+//helper function 
+
+
 #endif
