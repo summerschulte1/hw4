@@ -394,14 +394,16 @@ void AVLTree<Key, Value>::remove(const Key& key) {
     if (!nodeToRemove) return;  // Key not found, nothing to remove.
 
     int balanceChange;
-    AVLNode<Key, Value>* parent = static_cast<AVLNode<Key, Value>*>(nodeToRemove->getParent());
 
     // If node has two children, find predecessor.
     if (nodeToRemove->getLeft() && nodeToRemove->getRight()) {
         AVLNode<Key, Value>* predecessorNode = static_cast<AVLNode<Key, Value>*>(this->predecessor(nodeToRemove));
         this->nodeSwap(nodeToRemove, predecessorNode); // You may need to cast to AVLNode in nodeSwap.
-        nodeToRemove = predecessorNode;
+        //nodeToRemove = predecessorNode;
     }
+    AVLNode<Key, Value>* parent = static_cast<AVLNode<Key, Value>*>(nodeToRemove->getParent());
+
+
 
     AVLNode<Key, Value>* child = static_cast<AVLNode<Key, Value>*>(
         nodeToRemove->getLeft() ? nodeToRemove->getLeft() : nodeToRemove->getRight()
@@ -455,13 +457,13 @@ void AVLTree<Key, Value>:: removeFix(AVLNode<Key,Value>* n, int diff) {
         removeFix(p,ndiff);
       }
       //1b
-      if (c->getBalance() == 0) {
+      else if (c->getBalance() == 0) {
         rotateRight(n,c);
         n->setBalance(-1);
         c->setBalance(1);
       }
       //1c zig zag
-      if (c->getBalance() == 1) {
+      else if (c->getBalance() == 1) {
         AVLNode<Key, Value>* g = c->getRight();
         rotateLeft(c,g);
         rotateRight(n,c);
@@ -484,7 +486,7 @@ void AVLTree<Key, Value>:: removeFix(AVLNode<Key,Value>* n, int diff) {
       }
     }
     //case 2
-    if (n->getBalance() + diff == -1) {
+    else if (n->getBalance() + diff == -1) {
       n->setBalance(-1);
       return; //?
     }
@@ -498,7 +500,7 @@ void AVLTree<Key, Value>:: removeFix(AVLNode<Key,Value>* n, int diff) {
   else if (diff == 1) {
     //case 1: b(n) + diff == -2
     if (n->getBalance() + diff == 2) {
-      AVLNode<Key, Value>* c = n->getLeft();
+      AVLNode<Key, Value>* c = n->getRight();
       //zig zig case 1a
       if (c->getBalance() == 1) {
         rotateLeft(n,c);
@@ -507,13 +509,13 @@ void AVLTree<Key, Value>:: removeFix(AVLNode<Key,Value>* n, int diff) {
         removeFix(p,ndiff);
       }
       //1b
-      if (c->getBalance() == 0) {
+      else if (c->getBalance() == 0) {
         rotateLeft(n,c);
         n->setBalance(1);
         c->setBalance(-1);
       }
       //1c zig zag
-      if (c->getBalance() == -1) {
+      else if (c->getBalance() == -1) {
         AVLNode<Key, Value>* g = c->getLeft();
         rotateRight(c,g);
         rotateLeft(n,c);
@@ -536,7 +538,7 @@ void AVLTree<Key, Value>:: removeFix(AVLNode<Key,Value>* n, int diff) {
       }
     }
     //case 2
-    if (n->getBalance() + diff == 1) {
+    else if (n->getBalance() + diff == 1) {
       n->setBalance(1);
       //return; //?
     }
